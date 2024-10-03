@@ -11,11 +11,11 @@ struct Annonce: Identifiable {
 
 // Données simulées
 let annonces = [
-    Annonce(title: "Lit bébé en bois", description: "Lit en bois avec matelas inclus, en bon état.", imageName: "placeholder1", location: "Paris"),
-    Annonce(title: "Poussette double", description: "Poussette double pour jumeaux, pliable et légère.", imageName: "placeholder2", location: "Lyon"),
-    Annonce(title: "Chauffe-biberon électrique", description: "Chauffe-biberon pratique et rapide, neuf.", imageName: "placeholder3", location: "Marseille"),
-    Annonce(title: "Vêtements bébé fille (3-6 mois)", description: "Lot de vêtements pour bébé fille en excellent état.", imageName: "placeholder4", location: "Toulouse"),
-    Annonce(title: "Jouet musical", description: "Jouet musical avec différentes mélodies pour bébé.", imageName: "placeholder5", location: "Bordeaux")
+    Annonce(title: "Lit bébé en bois qui roule vite", description: "Lit en bois avec matelas inclus, en bon état.", imageName: "placeholder1", location: "Paris"),
+    Annonce(title: "Livre tchoupi super ghetto", description: "Livre sur l'histoire de la rue et des stupefiants de chez tchoupi.", imageName: "placeholder2", location: "Lyon"),
+    Annonce(title: "Pousette pour bébé", description: "Pousette pour bébé qui est en bon état.", imageName: "placeholder3", location: "Marseille"),
+    Annonce(title: "Tapis d'eau pour bébé", description: "Tapis d'eau super special pour bébé.", imageName: "placeholder4", location: "Toulouse"),
+    Annonce(title: "Figurine Son Goku Super Saiyajin GOD III", description: "Jouet dragonballsuper pour le bébé le plus fort du monde", imageName: "placeholder5", location: "Bordeaux")
 ]
 
 struct ContentView: View {
