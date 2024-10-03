@@ -1,6 +1,6 @@
 import SwiftUI
 
-// Structure pour représenter une annonce
+// Définition de la structure Annonce
 struct Annonce: Identifiable {
     let id = UUID()
     let title: String
@@ -11,7 +11,7 @@ struct Annonce: Identifiable {
     let category: String // Catégorie de l'objet
 }
 
-// Données simulées
+// Données simulées pour les annonces
 let annonces = [
     Annonce(title: "Lit bébé en bois qui roule vite", description: "Lit en bois avec matelas inclus, en bon état.", imageName: "placeholder1", location: "Paris", price: 200.0, category: "Chambre"),
     Annonce(title: "Livre tchoupi super ghetto", description: "Livre sur l'histoire de la rue et des stupefiants de chez tchoupi.", imageName: "placeholder2", location: "Lyon", price: 10.0, category: "Livre / Dvd"),
@@ -26,8 +26,8 @@ struct ContentView: View {
     @State private var selectedLocation = "Toute la france"
     @State private var minPrice: Double = 0
     @State private var maxPrice: Double = 1000
-    @State private var selectedPriceLower: Double = 0
-    @State private var selectedPriceUpper: Double = 1000
+    @State private var selectedPriceRange: ClosedRange<Double> = 0...1000
+    @State private var showPriceSlider = false
     
     let categories = ["Toute catégorie", "Poussette", "Sièges auto", "Chambre", "Chaussure / Vêtements", "Jeux / Éveil", "Livre / Dvd", "Toilette", "Repas", "Sortie", "Service"]
     let locations = ["Toute la france", "Île-de-France", "Centre-Val de Loire", "Bourgogne-Franche-Comté", "Normandie", "Hauts-de-France", "Grand Est", "Pays de la Loire", "Bretagne", "Nouvelle-Aquitaine", "Occitanie", "Auvergne-Rhône-Alpes", "Provence-Alpes-Côte d'Azur", "Corse", "DOM-TOM"]
@@ -36,7 +36,7 @@ struct ContentView: View {
         annonces.filter { annonce in
             (selectedCategory == "Toute catégorie" || annonce.category == selectedCategory) &&
             (selectedLocation == "Toute la france" || annonce.location == selectedLocation) &&
-            (annonce.price >= selectedPriceLower && annonce.price <= selectedPriceUpper) &&
+            (annonce.price >= selectedPriceRange.lowerBound && annonce.price <= selectedPriceRange.upperBound) &&
             (searchText.isEmpty || annonce.title.lowercased().contains(searchText.lowercased()))
         }
     }
@@ -51,34 +51,43 @@ struct ContentView: View {
                     .cornerRadius(8)
                     .padding([.leading, .trailing, .top])
                 
-                // Filtre de catégorie
-                Picker("Catégorie", selection: $selectedCategory) {
-                    ForEach(categories, id: \.self) {
-                        Text($0)
+                // Filtres de catégorie et localisation côte à côte
+                HStack {
+                    // Filtre de catégorie
+                    Picker("Catégorie", selection: $selectedCategory) {
+                        ForEach(categories, id: \.self) {
+                            Text($0)
+                        }
                     }
-                }
-                .pickerStyle(MenuPickerStyle())
-                .padding([.leading, .trailing])
-                
-                // Filtre de localisation
-                Picker("Localisation", selection: $selectedLocation) {
-                    ForEach(locations, id: \.self) {
-                        Text($0)
-                    }
-                }
-                .pickerStyle(MenuPickerStyle())
-                .padding([.leading, .trailing])
-                
-                // Filtre de prix
-                VStack(alignment: .leading) {
-                    Text("Prix : \(Int(selectedPriceLower))€ - \(Int(selectedPriceUpper))€")
-                        .padding([.leading, .trailing])
+                    .pickerStyle(MenuPickerStyle())
                     
-                    HStack {
-                        // Slider pour le prix
-                        Slider(value: $selectedPriceLower, in: minPrice...maxPrice, step: 10)
+                    // Filtre de localisation
+                    Picker("Localisation", selection: $selectedLocation) {
+                        ForEach(locations, id: \.self) {
+                            Text($0)
+                        }
+                    }
+                    .pickerStyle(MenuPickerStyle())
+                }
+                .padding([.leading, .trailing])
+                
+                // Bouton pour afficher plus de filtres
+                Button(action: {
+                    showPriceSlider.toggle()
+                }) {
+                    Text(showPriceSlider ? "Moins de filtres" : "Plus de filtres")
+                        .foregroundColor(Color("Accent"))
+                }
+                .padding()
+                
+                // Affichage du slider de prix uniquement si l'option est activée
+                if showPriceSlider {
+                    VStack(alignment: .leading) {
+                        Text("Prix : \(Int(selectedPriceRange.lowerBound))€ - \(Int(selectedPriceRange.upperBound))€")
                             .padding([.leading, .trailing])
-                        Slider(value: $selectedPriceUpper, in: minPrice...maxPrice, step: 10)
+                        
+                        // Slider avec deux boutons (min et max)
+                        RangeSlider(range: $selectedPriceRange, rangeLimits: minPrice...maxPrice, step: 10)
                             .padding([.leading, .trailing])
                     }
                 }
@@ -100,7 +109,7 @@ struct ContentView: View {
                                     VStack(alignment: .leading) {
                                         Text(annonce.title)
                                             .foregroundColor(Color("RoseText"))
-                                        Text("\(annonce.price)€")
+                                        Text("\(annonce.price, specifier: "%.0f")€")
                                             .font(.subheadline)
                                             .foregroundColor(.gray)
                                         Text(annonce.location)
