@@ -4,24 +4,44 @@ struct AnnonceDetailView: View {
     var annonce: Annonce
     
     var body: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading, spacing: 20) {
+            // Affichage de la photo (placeholder)
+            Image(annonce.imageName)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(maxWidth: .infinity)
+                .cornerRadius(12)
+                .padding(.bottom, 10)
+
+            // Titre de l'annonce
             Text(annonce.title)
                 .font(.largeTitle)
-                .foregroundColor(Color("RoseText")) // Titre en rose
+                .foregroundColor(Color("RoseText"))
                 .padding(.bottom, 10)
-            
+
+            // Localisation de l'objet
+            HStack {
+                Image(systemName: "mappin.circle.fill")
+                Text(annonce.location)
+                    .font(.subheadline)
+                    .foregroundColor(.gray)
+            }
+
+            // Description de l'annonce
             Text(annonce.description)
                 .font(.body)
                 .foregroundColor(Color.gray)
             
             Spacer()
             
+            // Bouton pour contacter le vendeur
             Button(action: {
-                // Action de contact
+                // Ajoute une action ici, par exemple, imprimer un message
+                print("Bouton contact cliqué")
             }) {
                 Text("Contacter le vendeur")
                     .padding()
-                    .background(Color("RoseBackground")) // Fond rose pour le bouton
+                    .background(Color("RoseBackground"))
                     .foregroundColor(.white)
                     .cornerRadius(10)
             }
