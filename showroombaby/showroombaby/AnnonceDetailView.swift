@@ -26,6 +26,15 @@ struct AnnonceDetailView: View {
                     .font(.subheadline)
                     .foregroundColor(.gray)
             }
+            
+            // Affichage du prix de l'article
+            HStack {
+                Image(systemName: "tag.fill")
+                Text("\(annonce.price, specifier: "%.0f")€")
+                    .font(.title2)
+                    .foregroundColor(.gray)
+            }
+            .padding(.top, 5)
 
             // Description de l'annonce
             Text(annonce.description)
